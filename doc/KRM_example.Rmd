@@ -28,6 +28,50 @@ stb_fb <- read.csv(paste0(dirname(getwd()),'/data/Sticklebacks_FB.csv'))
 stb_sb <- read.csv(paste0(dirname(getwd()),'/data/Sticklebacks_SB.csv'))
 ```
 
+```{r}
+library(plotly)
+cyl <- function(r=c(1,2),r2=c(0.1,0.5),h=2,a=0, nt=10, nv=10){
+  theta = seq(0,2*pi, length.out=nt)
+  v = seq(a, a+h, length.out=nv)
+  th = matrix(rep(theta,each=nv), ncol=nt)
+  x = cos(th)*seq(r[1],r[2] , length.out=nv)
+  y = sin(th)*seq(r2[1], r2[2] , length.out=nv)
+  z = matrix(rep(v,times=nt), ncol=nt)
+  return(list(x,y,z))
+}
+
+p = plot_ly()
+fb0 = stb_fb[stb_fb$ind==58,]
+sb0 = stb_sb[stb_sb$ind==58,]
+for(i in seq(1, nrow(fb0)-1)){
+  print(i)
+  cc = cyl(r=c(fb0$w_fb[i], fb0$w_fb[i+1]), 
+         a = fb0$x_fb[i],#abs(x_fb[i+1] - x_fb[i]), 
+         h=fb0$x_fb[i+1]-fb0$x_fb[i],
+         r2=c(fb0$z_fbU[i], fb0$z_fbU[i+1]))#x_fb[i])
+  p = p%>%add_trace(x=cc[[3]], y=cc[[1]], z=cc[[2]], 
+                    type='surface', 
+                    showscale = FALSE, 
+                    colorscale=list(c(0, 1), c("red", "red")),
+                    opacity=0.5)
+  
+}
+for(i in seq(1, nrow(sb0)-1)){
+  print(i)
+  cc = cyl(r=c(sb0$w_sb[i], sb0$w_sb[i+1]), 
+         a = sb0$x_sb[i],#abs(x_fb[i+1] - x_fb[i]), 
+         h=sb0$x_sb[i+1]-sb0$x_sb[i],
+         r2=c(sb0$z_sbU[i], sb0$z_sbU[i+1]))#x_fb[i])
+  p = p%>%add_trace(x=cc[[3]], y=cc[[1]], z=cc[[2]], 
+                    type='surface', 
+                    showscale = FALSE, 
+                    colorscale=list(c(0, 1), c("blue", "blue")),
+                    opacity=0.5)
+  
+}
+
+p%>%layout(scene=list(aspectmode='data'))
+```
 Let's have a look at the shapes we loaded.  
 To plot the loaded shapes, we can use the `shplot(x_fb, w_fb, x_sb, w_sb, z_fbU, z_fbL, z_sbU, z_sbL)` function:
 

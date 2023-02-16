@@ -12,29 +12,42 @@
 
 <meta name="author" content="Sven Gastauer" />
 
-<meta name="date" content="2021-10-14" />
+<meta name="date" content="2023-02-16" />
 
 <title>KRM - Benchmark</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -52,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -109,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -127,7 +146,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,19 +340,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">KRM - Benchmark</h1>
 <h4 class="author">Sven Gastauer</h4>
-<h4 class="date">2021-10-14</h4>
+<h4 class="date">2023-02-16</h4>
 
 
 
-<p>Testing the rKRM implementation of the KRM - Kirchhoff Ray Mode - model, based on equations described in detail in ‘Acoustic models of fish: The Atlantic cod (Gadus morhua)’ by Clay and Horne, 1994.</p>
-<p>The KRM and the underlying scattering theory holds validity for high frequencies (&gt;&gt;&gt; resonance freqeuncy) and for incident angles between 65 and 115 degrees.</p>
-<p>Shapes are approximated shapes through a series of cylinders. x coordinates are the along body coordinates (major axis of an ellipsoid) z coordinates are the upper and lower coordinates at position x (the upper and lower values of the minor axis). w defines the width frpm a top view along the body axis.</p>
+<p>Testing the rKRM implementation of the KRM - Kirchhoff Ray Mode -
+model, based on equations described in detail in ‘Acoustic models of
+fish: The Atlantic cod (Gadus morhua)’ by Clay and Horne, 1994.</p>
+<p>The KRM and the underlying scattering theory holds validity for high
+frequencies (&gt;&gt;&gt; resonance freqeuncy) and for incident angles
+between 65 and 115 degrees.</p>
+<p>Shapes are approximated shapes through a series of cylinders. x
+coordinates are the along body coordinates (major axis of an ellipsoid)
+z coordinates are the upper and lower coordinates at position x (the
+upper and lower values of the minor axis). w defines the width frpm a
+top view along the body axis.</p>
 <p>The model is split in two parts:<br />
 1) The Swimbladder (or gas bubble) part<br />
 2) The Fish body (or fluid like) part</p>
 <div id="weakly-scattering-fluid-sphere" class="section level2">
 <h2>Weakly scattering fluid Sphere</h2>
-<p>To approximate scattering by a fluid sphere through the KRM mo9del, we set the swimbladder part to 0 and only consider the Fish body part.<br />
+<p>To approximate scattering by a fluid sphere through the KRM mo9del,
+we set the swimbladder part to 0 and only consider the Fish body
+part.<br />
 We first define the sphere parameters:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(KRMr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Define the the sphere parameters</span></span>
@@ -163,7 +372,8 @@ We first define the sphere parameters:</p>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>cfb <span class="ot">=</span>  <span class="fl">1480.3</span> <span class="co">#m/s soundspeed inside the sphere</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>rhow <span class="ot">=</span> <span class="fl">1026.8</span> <span class="co">#kg/m3 density surrounding water</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>rhofb <span class="ot">=</span> <span class="fl">1028.9</span> <span class="co">#kg/m3 density fluid inside sphere</span></span></code></pre></div>
-<p>Now we can construct shape information that is understoof by the KRM model:</p>
+<p>Now we can construct shape information that is understoof by the KRM
+model:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate sphere coordinates</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ang <span class="ot">=</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>,<span class="dv">90</span>,<span class="at">length.out=</span><span class="dv">30</span>) <span class="co">#angles to consider</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>xfb <span class="ot">=</span> <span class="fu">sin</span>(ang <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">180</span>) <span class="co">#x coordinates of a sphere</span></span>
@@ -189,9 +399,15 @@ We first define the sphere parameters:</p>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">z_fbL =</span> zfbL,</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">z_sbU =</span> <span class="dv">0</span>,</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">z_sbL =</span> <span class="dv">0</span>)</span></code></pre></div>
-<p>We will use the analytical solution of the scattering by a fluid sphere as descirbed in Jech et al. 2015, modified from Anderson (1950).</p>
-<p><em>Jech, J. M., Horne, J. K., Chu, D., Demer, D. A., Francis, D. T., Gorska, N., … &amp; Reeder, D. B. (2015).“Comparisons among ten models of acoustic backscattering used in aquatic ecosystem research.” The Journal of the Acoustical Society of America, 138(6), 3742-3764.<br />
-Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal of the Acoustical Society of America, 22(4), 426-431.</em></p>
+<p>We will use the analytical solution of the scattering by a fluid
+sphere as descirbed in Jech et al. 2015, modified from Anderson
+(1950).</p>
+<p><em>Jech, J. M., Horne, J. K., Chu, D., Demer, D. A., Francis, D. T.,
+Gorska, N., … &amp; Reeder, D. B. (2015).”Comparisons among ten models
+of acoustic backscattering used in aquatic ecosystem research.” The
+Journal of the Acoustical Society of America, 138(6), 3742-3764.<br />
+Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The
+Journal of the Acoustical Society of America, 22(4), 426-431.</em></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>kfs<span class="sc">$</span>bench<span class="ot">=</span><span class="fu">sapply</span>(freqs,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">function</span>(f){</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">fsphere</span>(f,a,cw,cfb<span class="sc">/</span>cw,</span>
@@ -212,13 +428,14 @@ Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal 
 </div>
 <div id="gas-filled-fluid-sphere" class="section level2">
 <h2>Gas filled fluid sphere</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define the the sphere parameters</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">12</span>,<span class="dv">400</span>,<span class="dv">1</span>) <span class="sc">*</span> <span class="dv">1000</span> <span class="co">#Hz frequencies to be considered in Hz</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="fl">0.01</span> <span class="co">#m radius of the sphere</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>cw <span class="ot">=</span> <span class="fl">1477.4</span> <span class="co">#m/s sound speed surrounding water</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>cfb <span class="ot">=</span>  <span class="fl">345.0</span> <span class="co">#m/s soundspeed inside the sphere</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>rhow <span class="ot">=</span> <span class="fl">1026.8</span> <span class="co">#kg/m3 density surrounding water</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>rhofb <span class="ot">=</span> <span class="fl">1.24</span> <span class="co">#kg/m3 density fluid inside sphere</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Define the the sphere parameters</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>freqs <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">12</span>,<span class="dv">400</span>,<span class="dv">1</span>) <span class="sc">*</span> <span class="dv">1000</span> <span class="co">#Hz frequencies to be considered in Hz</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="fl">0.01</span> <span class="co">#m radius of the sphere</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>cw <span class="ot">=</span> <span class="fl">1477.4</span> <span class="co">#m/s sound speed surrounding water</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>cfb <span class="ot">=</span>  <span class="fl">345.0</span> <span class="co">#m/s soundspeed inside the sphere</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>rhow <span class="ot">=</span> <span class="fl">1026.8</span> <span class="co">#kg/m3 density surrounding water</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>rhofb <span class="ot">=</span> <span class="fl">1.24</span> <span class="co">#kg/m3 density fluid inside sphere</span></span></code></pre></div>
 <p>Now we can run the KRM simulation:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>kfs <span class="ot">=</span> <span class="fu">krm.sim</span>(<span class="at">frequency =</span>freqs,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">c.w =</span> cw,</span>
@@ -231,9 +448,15 @@ Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal 
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">w_sb =</span> wfb,</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">z_sbU =</span> zfbU,</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">z_sbL =</span> zfbL)</span></code></pre></div>
-<p>We will use the analytical solution of the scattering by a fluid sphere as descirbed in Jech et al. 2015, modified from Anderson (1950).</p>
-<p><em>Jech, J. M., Horne, J. K., Chu, D., Demer, D. A., Francis, D. T., Gorska, N., … &amp; Reeder, D. B. (2015).“Comparisons among ten models of acoustic backscattering used in aquatic ecosystem research.” The Journal of the Acoustical Society of America, 138(6), 3742-3764.<br />
-Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal of the Acoustical Society of America, 22(4), 426-431.</em></p>
+<p>We will use the analytical solution of the scattering by a fluid
+sphere as descirbed in Jech et al. 2015, modified from Anderson
+(1950).</p>
+<p><em>Jech, J. M., Horne, J. K., Chu, D., Demer, D. A., Francis, D. T.,
+Gorska, N., … &amp; Reeder, D. B. (2015).”Comparisons among ten models
+of acoustic backscattering used in aquatic ecosystem research.” The
+Journal of the Acoustical Society of America, 138(6), 3742-3764.<br />
+Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The
+Journal of the Acoustical Society of America, 22(4), 426-431.</em></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>kfs<span class="sc">$</span>bench<span class="ot">=</span><span class="fu">sapply</span>(freqs,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">function</span>(f){</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">fsphere</span>(f,a,cw,cfb<span class="sc">/</span>cw,</span>
@@ -255,7 +478,9 @@ Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal 
 </div>
 <div id="sardine-like" class="section level2">
 <h2>Sardine (like)</h2>
-<p>First we define the shape of a sardine like fish. Here we take the sardine shape profile from the <a href="https://swfscdata.nmfs.noaa.gov/AST/KRM/krm.html">NOAA SWFSC website</a>.</p>
+<p>First we define the shape of a sardine like fish. Here we take the
+sardine shape profile from the <a href="https://swfscdata.nmfs.noaa.gov/AST/KRM/krm.html">NOAA SWFSC
+website</a>.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Sardine</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fb <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">x_fb =</span> <span class="fu">c</span>(<span class="fl">0.000000</span>, <span class="fl">0.000556</span>, <span class="fl">0.001111</span>, <span class="fl">0.001667</span>, <span class="fl">0.002222</span>, <span class="fl">0.002778</span>, <span class="fl">0.003333</span>, <span class="fl">0.003889</span>, <span class="fl">0.004444</span>, <span class="fl">0.005000</span>, <span class="fl">0.005556</span>, <span class="fl">0.006111</span>, <span class="fl">0.006667</span>, <span class="fl">0.007222</span>, <span class="fl">0.007778</span>, <span class="fl">0.008333</span>, <span class="fl">0.008889</span>, <span class="fl">0.009444</span>, <span class="fl">0.010000</span>, <span class="fl">0.010556</span>, <span class="fl">0.011111</span>, <span class="fl">0.011667</span>, <span class="fl">0.012222</span>, <span class="fl">0.012778</span>, <span class="fl">0.013333</span>, <span class="fl">0.013889</span>, <span class="fl">0.014444</span>, <span class="fl">0.015000</span>, <span class="fl">0.015556</span>, <span class="fl">0.016111</span>, <span class="fl">0.016667</span>, <span class="fl">0.017222</span>, <span class="fl">0.017778</span>, <span class="fl">0.018333</span>, <span class="fl">0.018889</span>, <span class="fl">0.019444</span>, <span class="fl">0.020000</span>, <span class="fl">0.020556</span>, <span class="fl">0.021111</span>, <span class="fl">0.021667</span>, <span class="fl">0.022222</span>, <span class="fl">0.022778</span>, <span class="fl">0.023333</span>, <span class="fl">0.023889</span>, <span class="fl">0.024444</span>, <span class="fl">0.025000</span>, <span class="fl">0.025556</span>, <span class="fl">0.026111</span>, <span class="fl">0.026667</span>, <span class="fl">0.027222</span>, <span class="fl">0.027778</span>, <span class="fl">0.028333</span>, <span class="fl">0.028889</span>, <span class="fl">0.029444</span>, <span class="fl">0.030000</span>, <span class="fl">0.030556</span>, <span class="fl">0.031111</span>, <span class="fl">0.031667</span>, <span class="fl">0.032222</span>, <span class="fl">0.032778</span>, <span class="fl">0.033333</span>, <span class="fl">0.033889</span>, <span class="fl">0.034444</span>, <span class="fl">0.035000</span>, <span class="fl">0.035556</span>, <span class="fl">0.036111</span>, <span class="fl">0.036667</span>, <span class="fl">0.037222</span>, <span class="fl">0.037778</span>, <span class="fl">0.038333</span>, <span class="fl">0.038889</span>, <span class="fl">0.039444</span>, <span class="fl">0.040000</span>, <span class="fl">0.040556</span>, <span class="fl">0.041111</span>, <span class="fl">0.041667</span>, <span class="fl">0.042222</span>, <span class="fl">0.042778</span>, <span class="fl">0.043333</span>, <span class="fl">0.043889</span>, <span class="fl">0.044444</span>, <span class="fl">0.045000</span>, <span class="fl">0.045556</span>, <span class="fl">0.046111</span>, <span class="fl">0.046667</span>, <span class="fl">0.047222</span>, <span class="fl">0.047778</span>, <span class="fl">0.048333</span>, <span class="fl">0.048889</span>, <span class="fl">0.049444</span>, <span class="fl">0.050000</span>, <span class="fl">0.050556</span>, <span class="fl">0.051111</span>, <span class="fl">0.051667</span>, <span class="fl">0.052222</span>, <span class="fl">0.052778</span>, <span class="fl">0.053333</span>, <span class="fl">0.053889</span>, <span class="fl">0.054444</span>, <span class="fl">0.055000</span>, <span class="fl">0.055556</span>, <span class="fl">0.056111</span>, <span class="fl">0.056667</span>, <span class="fl">0.057222</span>, <span class="fl">0.057778</span>, <span class="fl">0.058333</span>, <span class="fl">0.058889</span>, <span class="fl">0.059444</span>, <span class="fl">0.060000</span>, <span class="fl">0.060556</span>, <span class="fl">0.061111</span>, <span class="fl">0.061667</span>, <span class="fl">0.062222</span>, <span class="fl">0.062778</span>, <span class="fl">0.063333</span>, <span class="fl">0.063889</span>, <span class="fl">0.064444</span>, <span class="fl">0.065000</span>, <span class="fl">0.065556</span>, <span class="fl">0.066111</span>, <span class="fl">0.066667</span>, <span class="fl">0.067222</span>, <span class="fl">0.067778</span>, <span class="fl">0.068333</span>, <span class="fl">0.068889</span>, <span class="fl">0.069444</span>, <span class="fl">0.070000</span>, <span class="fl">0.070556</span>, <span class="fl">0.071111</span>, <span class="fl">0.071667</span>, <span class="fl">0.072222</span>, <span class="fl">0.072778</span>, <span class="fl">0.073333</span>, <span class="fl">0.073889</span>, <span class="fl">0.074444</span>, <span class="fl">0.075000</span>, <span class="fl">0.075556</span>, <span class="fl">0.076111</span>, <span class="fl">0.076667</span>, <span class="fl">0.077222</span>, <span class="fl">0.077778</span>, <span class="fl">0.078333</span>, <span class="fl">0.078889</span>, <span class="fl">0.079444</span>, <span class="fl">0.080000</span>, <span class="fl">0.080556</span>, <span class="fl">0.081111</span>, <span class="fl">0.081667</span>, <span class="fl">0.082222</span>, <span class="fl">0.082778</span>, <span class="fl">0.083333</span>, <span class="fl">0.083889</span>, <span class="fl">0.084444</span>, <span class="fl">0.085000</span>, <span class="fl">0.085556</span>, <span class="fl">0.086111</span>, <span class="fl">0.086667</span>, <span class="fl">0.087222</span>, <span class="fl">0.087778</span>, <span class="fl">0.088333</span>, <span class="fl">0.088889</span>, <span class="fl">0.089444</span>, <span class="fl">0.090000</span>, <span class="fl">0.090556</span>, <span class="fl">0.091111</span>, <span class="fl">0.091667</span>, <span class="fl">0.092222</span>, <span class="fl">0.092778</span>, <span class="fl">0.093333</span>, <span class="fl">0.093889</span>, <span class="fl">0.094444</span>, <span class="fl">0.095000</span>, <span class="fl">0.095556</span>, <span class="fl">0.096111</span>, <span class="fl">0.096667</span>, <span class="fl">0.097222</span>, <span class="fl">0.097778</span>, <span class="fl">0.098333</span>, <span class="fl">0.098889</span>, <span class="fl">0.099444</span>, <span class="fl">0.100000</span>, <span class="fl">0.100556</span>, <span class="fl">0.101111</span>, <span class="fl">0.101667</span>, <span class="fl">0.102222</span>, <span class="fl">0.102778</span>, <span class="fl">0.103333</span>, <span class="fl">0.103889</span>, <span class="fl">0.104444</span>, <span class="fl">0.105000</span>, <span class="fl">0.105556</span>, <span class="fl">0.106111</span>, <span class="fl">0.106667</span>, <span class="fl">0.107222</span>, <span class="fl">0.107778</span>, <span class="fl">0.108333</span>, <span class="fl">0.108889</span>, <span class="fl">0.109444</span>, <span class="fl">0.110000</span>, <span class="fl">0.110556</span>, <span class="fl">0.111111</span>, <span class="fl">0.111667</span>, <span class="fl">0.112222</span>, <span class="fl">0.112778</span>, <span class="fl">0.113333</span>, <span class="fl">0.113889</span>, <span class="fl">0.114444</span>, <span class="fl">0.115000</span>, <span class="fl">0.115556</span>, <span class="fl">0.116111</span>, <span class="fl">0.116667</span>, <span class="fl">0.117222</span>, <span class="fl">0.117778</span>, <span class="fl">0.118333</span>, <span class="fl">0.118889</span>, <span class="fl">0.119444</span>, <span class="fl">0.120000</span>, <span class="fl">0.120556</span>, <span class="fl">0.121111</span>, <span class="fl">0.121667</span>, <span class="fl">0.122222</span>, <span class="fl">0.122778</span>, <span class="fl">0.123333</span>, <span class="fl">0.123889</span>, <span class="fl">0.124444</span>, <span class="fl">0.125000</span>, <span class="fl">0.125556</span>, <span class="fl">0.126111</span>, <span class="fl">0.126667</span>, <span class="fl">0.127222</span>, <span class="fl">0.127778</span>, <span class="fl">0.128333</span>, <span class="fl">0.128889</span>, <span class="fl">0.129444</span>, <span class="fl">0.130000</span>, <span class="fl">0.130556</span>, <span class="fl">0.131111</span>, <span class="fl">0.131667</span>, <span class="fl">0.132222</span>, <span class="fl">0.132778</span>, <span class="fl">0.133333</span>, <span class="fl">0.133889</span>, <span class="fl">0.134444</span>, <span class="fl">0.135000</span>, <span class="fl">0.135556</span>, <span class="fl">0.136111</span>, <span class="fl">0.136667</span>, <span class="fl">0.137222</span>, <span class="fl">0.137778</span>, <span class="fl">0.138333</span>, <span class="fl">0.138889</span>, <span class="fl">0.139444</span>, <span class="fl">0.140000</span>, <span class="fl">0.140556</span>, <span class="fl">0.141111</span>, <span class="fl">0.141667</span>, <span class="fl">0.142222</span>, <span class="fl">0.142778</span>, <span class="fl">0.143333</span>, <span class="fl">0.143889</span>, <span class="fl">0.144444</span>, <span class="fl">0.145000</span>, <span class="fl">0.145556</span>, <span class="fl">0.146111</span>, <span class="fl">0.146667</span>, <span class="fl">0.147222</span>, <span class="fl">0.147778</span>, <span class="fl">0.148333</span>, <span class="fl">0.148889</span>, <span class="fl">0.149444</span>, <span class="fl">0.150000</span>, <span class="fl">0.150556</span>, <span class="fl">0.151111</span>, <span class="fl">0.151667</span>, <span class="fl">0.152222</span>, <span class="fl">0.152778</span>, <span class="fl">0.153333</span>, <span class="fl">0.153889</span>, <span class="fl">0.154444</span>, <span class="fl">0.155000</span>, <span class="fl">0.155556</span>, <span class="fl">0.156111</span>, <span class="fl">0.156667</span>, <span class="fl">0.157222</span>, <span class="fl">0.157778</span>, <span class="fl">0.158333</span>, <span class="fl">0.158889</span>, <span class="fl">0.159444</span>, <span class="fl">0.160000</span>, <span class="fl">0.160556</span>, <span class="fl">0.161111</span>, <span class="fl">0.161667</span>, <span class="fl">0.162222</span>, <span class="fl">0.162778</span>, <span class="fl">0.163333</span>, <span class="fl">0.163889</span>, <span class="fl">0.164444</span>, <span class="fl">0.165000</span>, <span class="fl">0.165556</span>, <span class="fl">0.166111</span>, <span class="fl">0.166667</span>, <span class="fl">0.167222</span>, <span class="fl">0.167778</span>, <span class="fl">0.168333</span>, <span class="fl">0.168889</span>, <span class="fl">0.169444</span>, <span class="fl">0.170000</span>, <span class="fl">0.170556</span>, <span class="fl">0.171111</span>, <span class="fl">0.171667</span>, <span class="fl">0.172222</span>, <span class="fl">0.172778</span>, <span class="fl">0.173333</span>, <span class="fl">0.173889</span>, <span class="fl">0.174444</span>, <span class="fl">0.175000</span>, <span class="fl">0.175556</span>, <span class="fl">0.176111</span>, <span class="fl">0.176667</span>, <span class="fl">0.177222</span>, <span class="fl">0.177778</span>, <span class="fl">0.178333</span>, <span class="fl">0.178889</span>, <span class="fl">0.179444</span>, <span class="fl">0.180000</span>, <span class="fl">0.180556</span>, <span class="fl">0.181111</span>, <span class="fl">0.181667</span>, <span class="fl">0.182222</span>, <span class="fl">0.182778</span>, <span class="fl">0.183333</span>, <span class="fl">0.183889</span>, <span class="fl">0.184444</span>, <span class="fl">0.185000</span>, <span class="fl">0.185556</span>, <span class="fl">0.186111</span>, <span class="fl">0.186667</span>, <span class="fl">0.187222</span>, <span class="fl">0.187778</span>, <span class="fl">0.188333</span>, <span class="fl">0.188889</span>, <span class="fl">0.189444</span>, <span class="fl">0.190000</span>, <span class="fl">0.190556</span>, <span class="fl">0.191111</span>, <span class="fl">0.191667</span>, <span class="fl">0.192222</span>, <span class="fl">0.192778</span>, <span class="fl">0.193333</span>, <span class="fl">0.193889</span>, <span class="fl">0.194444</span>, <span class="fl">0.195000</span>, <span class="fl">0.195556</span>, <span class="fl">0.196111</span>, <span class="fl">0.196667</span>, <span class="fl">0.197222</span>, <span class="fl">0.197778</span>, <span class="fl">0.198333</span>, <span class="fl">0.198889</span>, <span class="fl">0.199444</span>, <span class="fl">0.200000</span>, <span class="fl">0.200556</span>, <span class="fl">0.201111</span>, <span class="fl">0.201667</span>, <span class="fl">0.202222</span>, <span class="fl">0.202778</span>, <span class="fl">0.203333</span>, <span class="fl">0.203889</span>, <span class="fl">0.204444</span>, <span class="fl">0.205000</span>, <span class="fl">0.205556</span>, <span class="fl">0.206111</span>, <span class="fl">0.206667</span>, <span class="fl">0.207222</span>, <span class="fl">0.207778</span>, <span class="fl">0.208333</span>, <span class="fl">0.208889</span>, <span class="fl">0.209444</span>, <span class="fl">0.210000</span>),</span>
@@ -302,11 +527,16 @@ Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal 
 <p>Now we can have a look at the shape:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shplot</span>(<span class="at">x_fb =</span> fb<span class="sc">$</span>x_fb, <span class="at">w_fb =</span> fb<span class="sc">$</span>w_fb, <span class="at">x_sb =</span> sb<span class="sc">$</span>x_sb, <span class="at">w_sb =</span> sb<span class="sc">$</span>w_sb,<span class="at">z_fbU =</span> fb<span class="sc">$</span>z_fbU,<span class="at">z_fbL =</span> fb<span class="sc">$</span>z_fbL,<span class="at">z_sbU =</span> sb<span class="sc">$</span>z_sbU,<span class="at">z_sbL =</span> sb<span class="sc">$</span>z_sbL)</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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CL+wyquDqSi+uOwpuzXo7uETWwwG0mvxrEwDPRgog4XUWyZRHso+0I8Rc1lkn+UX5aHrCTSr9UtGs9LhmgI9Gj+9JZzgJAdwrYEeElvyZ3e5NSZtAkaBrordu+pSu7LIRHUQYhujM+pvnsvNonpvcmqBtmkLN5CpZ0+XSaD+PUnbp9lbNoFiIiaB7t/VuZy9EShGMVyDOst7AsUoRq9Bd1luFm3vnidQ9GK2F+838tsnAsUYHAeFNAKFNKNA+axOhGG0k8RndSIM28NMfNIcRjI9UF/yWZ0YiTUopFm9Bg19+UVcKaO9eD6rE2FwHBTS8ntfPLJiHShnM2EUNvGQRqCQRqCQxskikMbJIpDGnzohjZNFII01KKRxsgikcbIIpHEcFNIsAz14KRri4XCNCBTSCBTSJgsU6GWiQMOOFALDpj1svDnK77lj2AjDEijDSg9LoAwrPSyBMqz0sATKsNLDEijDSg9LoAwrPSyBMqz0sPxtEtIIFNIIFNIIFNIIFNIIFNIIFNIIFNIIFNIIFNIIFNIIFNIIFNIsA10Xxc3zyRdH90Yb1l9V6j7WsGX5/vvXM/dGGjbu3NbX3Z6fmZgQDANdu2ld76e3+eLo3njDvv9gmsnJfG0W9RVU485tM2zUud0+uRur6tfBYm7tAvVvn1/eH39xdG+8YVuvuGsybL0qqQaMO7fNsHHn9v2huijn6vbVZG7tAm2m++iLo3vjDVuuLLd3n4etrp9aNxJ3bpthI8+tH/vm2WRuDQOtNzO73+Xmi6N74w1bLv+4f50UYdhyfzPu3DbDxp9bN6TRsrUL1L8Y2b0kab44ujfesJtFdc3d5dxq1PJkvurlFHdum2Hjz219zW2Tub2SQHffs1uVSQV6ctN+2P0+UkKBam3i/fceHtv/YcBhy/3NqTbx/nvx5tZ/ZkFim3itnST/PbujLyfzNcVOUnkcaLS53X3AW2I7SVKHmfxzZ7gqO5mv9RSHmY5+L6LN7f7DXxI7zKR1oL5+2gx3G07maz3Jgfr9XnzMuX1/mJ+5NxTLP3Wu/B++tk/3H18c3Ig77LIoCrPXZCfDNuuvuHPbDBtzblf+ksnVlwZzy8kikEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagkEagtqrrDW8W86knI10Eaqu66vCq+swNXIZAja1vf/mr8ecSZo1ArS1NP9Q1ewRqbW17Le7cEaix7dOPxp/smjcCNbaa/a/+dBZchkBtbRaP5h+OnTUCtbWcvTUfEYMLECikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESikESik/R9wJul2psC7wgAAAABJRU5ErkJggg==" /><!-- --></p>
-<p>Because we have defined the fishbody coordinates and the swimbladder coordinates in a dataframe, the most simple way to run one KRM simulation in KRMr is:</p>
+<p>Because we have defined the fishbody coordinates and the swimbladder
+coordinates in a dataframe, the most simple way to run one KRM
+simulation in KRMr is:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">krm</span>(<span class="at">fbshape =</span> fb, <span class="at">sbshape =</span> sb)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   frequency       TS  c_w rho_w theta c_fb c_sb rho_sb rho_fb    L</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    120000 -76.0749 1490  1030    90 1570  345   1.24   1070 0.21</span></span></code></pre></div>
-<p>Now we are ready to run a KRM simulation. Let’s have a look at the TS for a 21 cm sardine from 120 to 200 kHz. Here we will define the different coordinates separately and add the parameters we want to simulate:</p>
+<p>Now we are ready to run a KRM simulation. Let’s have a look at the TS
+for a 21 cm sardine from 120 to 200 kHz. Here we will define the
+different coordinates separately and add the parameters we want to
+simulate:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>TS <span class="ot">=</span> <span class="fu">krm.sim</span>(<span class="at">frequency =</span><span class="fu">seq</span>(<span class="dv">20</span>,<span class="fl">200.1</span>) <span class="sc">*</span> <span class="dv">1000</span>,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">c.w =</span> <span class="dv">1490</span>,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">rho.w =</span> <span class="dv">1030</span>,</span>
@@ -331,7 +561,9 @@ Anderson, V. C. (1950). “Sound scattering from a fluid sphere.” The Journal 
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;Frequency (kHz)&#39;</span>, </span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="fu">expression</span>(TS<span class="sc">~</span><span class="st">&#39;(&#39;</span><span class="sc">~</span>dB<span class="sc">~</span>re<span class="sc">~</span> m<span class="sc">^-</span><span class="dv">2</span><span class="sc">~</span><span class="st">&#39;)&#39;</span>))</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>We can also run a simulation over multiple parameters, for example frequencies from 120-200 kHz and incident angles from 65-115 degrees:</p>
+<p>We can also run a simulation over multiple parameters, for example
+frequencies from 120-200 kHz and incident angles from 65-115
+degrees:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>TS <span class="ot">=</span> <span class="fu">krm.sim</span>(<span class="at">frequency =</span><span class="fu">seq</span>(<span class="dv">120</span>,<span class="fl">200.1</span>) <span class="sc">*</span> <span class="dv">1000</span>,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">c.w =</span> <span class="dv">1490</span>,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">rho.w =</span> <span class="dv">1030</span>,</span>
