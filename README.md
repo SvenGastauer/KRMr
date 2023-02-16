@@ -98,3 +98,7 @@ View citation in R:
 
 ```citation("KRMr")```
 
+## Getting help
+For KRMr specific questions make a feature request or post an issue on [GitHub](https://github.com/SvenGastauer/KRMr/issues).    
+For general R questions visit [Stack Overflow](https://stackoverflow.com/questions/tagged/r).  
+If none of those options seem appropriate and you are getting really desperate, contact one the authors.
