@@ -113,6 +113,12 @@ For KRMr specific questions make a feature request or post an issue on [GitHub](
 For general R questions visit [Stack Overflow](https://stackoverflow.com/questions/tagged/r).  
 If none of those options seem appropriate and you are getting really desperate, contact one the authors.
 
+## Example
+
+### Orientation
+![KRM Orientatio](https://github.com/SvenGastauer/KRMr/blob/main/inst/extdata/orientation.png)  
+90° corresponds to braodside incidence. Rememmber that the model is only valid for angles between 65 and 115° (+/- 25° from broadside incidence).  
+
 ## Publications using KRMr
 
 TBA
