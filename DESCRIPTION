@@ -21,6 +21,7 @@ Imports:
     tidyverse,
     magick,
     grid,
+    leaflet,
     tibble,
     sf
 RdMacros: Rdpack
