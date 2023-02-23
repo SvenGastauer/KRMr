@@ -24,8 +24,8 @@ In our special case the csv files contain two different fish body and swimbladde
 ```{r}
 library(dplyr)
 library(KRMr)
-stb_fb <- read.csv(paste0(dirname(getwd()),'/data/Sticklebacks_FB.csv'))
-stb_sb <- read.csv(paste0(dirname(getwd()),'/data/Sticklebacks_SB.csv'))
+data(stb_fb) #fish body shapes of a few stickleback
+data(stb_sb) #swimbladder shape of a few sticklback
 ```
 
 ```{r}
@@ -44,7 +44,6 @@ p = plot_ly()
 fb0 = stb_fb[stb_fb$ind==58,]
 sb0 = stb_sb[stb_sb$ind==58,]
 for(i in seq(1, nrow(fb0)-1)){
-  print(i)
   cc = cyl(r=c(fb0$w_fb[i], fb0$w_fb[i+1]), 
          a = fb0$x_fb[i],#abs(x_fb[i+1] - x_fb[i]), 
          h=fb0$x_fb[i+1]-fb0$x_fb[i],
@@ -57,7 +56,6 @@ for(i in seq(1, nrow(fb0)-1)){
   
 }
 for(i in seq(1, nrow(sb0)-1)){
-  print(i)
   cc = cyl(r=c(sb0$w_sb[i], sb0$w_sb[i+1]), 
          a = sb0$x_sb[i],#abs(x_fb[i+1] - x_fb[i]), 
          h=sb0$x_sb[i+1]-sb0$x_sb[i],
@@ -148,7 +146,7 @@ Let's have a look at the outcome:
 library(ggplot2)
 ggplot(data=TS, 
        aes(x=frequency/1000, y=TS))+
-  geom_line(size=1.2)+
+  geom_line(linewidth=1.2)+
   ylab(expression(TS~(~dB~re~m^2)))+
   xlab('Frequency (kHz)')+
   theme_classic()+
@@ -185,7 +183,7 @@ ggplot2::ggplot(data=TS, ggplot2::aes(x= theta, y=L*1000 , z=TS))+
   facet_wrap(.~frequency/1000)+
   geom_contour_filled(bins=15)+
   ggplot2::scale_fill_viridis_d(expression(TS~'('~dB~re~ m^2~')'))+
-  ggplot2::xlab('Theta (degrees)')+
+  ggplot2::xlab('Theta (°)')+
   ggplot2::ylab(expression(L~'(mm)'))+
   ggplot2::scale_x_continuous(expand=c(0,0))+
   ggplot2::scale_y_continuous(expand=c(0,0))+
@@ -290,8 +288,3 @@ ggplot(TSrot, aes(x = theta, y = TS, group=frequency/1000, col=TS)) +
 
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.

@@ -80,90 +80,9 @@ run_krm<-function(){
   #####################################################################
   #####################################################################
 
-  # generate xyz points for ellipse
-  gel=function(np=100, xc=0,yc=0, h=1,w=1,phi=0){
-    w=w/2
-    h=h/2
-    phi <- (phi + 90) * pi / 180 #degrees to radians
-    t <- seq(0, 2*pi, length.out = np) # Compute angular points
-    x <- xc + w*cos(t)*cos(phi) - h*sin(t)*sin(phi) #X coordinates
-    y <- y <- yc + w * cos(t) * sin(phi) + h * sin(t) * cos(phi) #y coordinates
-    return(cbind(x,y))
-  }
 
   #####################################################################
   #####################################################################
-
-  # get xyz points for ellipse from top and side view
-  getxyz<-function(xxy,xxy2){
-    pd=data.frame()
-    for(i in 1:nrow(xxy)){
-      o=data.frame(gel(w=xxy$dy[i],h=xxy2$dy[i], xc=xxy$X[i], yc=(xxy$Ymax[i]+xxy$Ymin[i])/2))
-      o$z=xxy$X[i]
-      pd=rbind(pd,o)
-    }
-    return(pd)
-  }
-
-  #####################################################################
-  #####################################################################
-
-  get_shp3d<-function(shpfn){
-    shp=read.csv(shpfn)
-
-    fb=do.call('rbind',lapply(1:nrow(shp), FUN=function(i){
-      ellipse(x=0,
-              y=0,
-              major=shp$w_fb[i],
-              minor=abs(shp$z_fbU[i]-shp$z_fbL[i]), nv=100)%>%mutate(z=shp$x_fb[i])
-    }))
-    swb=do.call('rbind',lapply(1:length(shp$x_sb[is.na(shp$x_sb)==F]), FUN=function(i){
-      ellipse(x=0,
-              y=0,
-              major=shp$w_sb[i],
-              minor=abs(shp$z_sbU[i]-shp$z_sbL[i]), nv=100)%>%mutate(z=shp$x_sb[i])
-    }))
-
-
-    swb2=do.call('rbind',lapply(1:length(shp$x_sb2[is.na(shp$x_sb2)==F]), FUN=function(i){
-      ellipse(x=0,
-              y=0,
-              major=shp$w_sb2[i],
-              minor=abs(shp$z_sbU2[i]-shp$z_sbL2[i]), nv=100)%>%mutate(z=shp$x_sb2[i])
-    }))
-
-    fig=plot_ly(data=fb, x = ~x, y = ~y, z = ~z,
-                #width=0.1,
-                opacity=0.1, type = 'scatter3d', mode = 'lines', name='FB')
-    if(nrow(swb)>0){
-      fig <- fig %>% add_trace(data=swb,x = ~x, y = ~y, z = ~z, type = 'scatter3d', mode = 'lines',name="swb")
-    }
-    if(nrow(swb2)>0){
-      fig <- fig %>% add_trace(data=swb2,x = ~x, y = ~y, z = ~z, type = 'scatter3d', mode = 'lines',name="swb2")
-    }
-    return(fig%>%layout(scene = list(aspectmode='data')))
-  }
-
-
-
-
-  ellipse <- function (x=0, y=0, major = 1, minor = 1, theta = 0, nv = 10){
-    major=major/2
-    minor=minor/2
-    angle <- theta * pi/180
-    segment <- c(0, 360)
-    segment <- segment * pi/180
-
-    z <- seq(segment[1], segment[2], length = nv + 1)
-    xx <- minor * cos(z)
-    yy <- major * sin(z)
-    alpha <- atan2(xx, yy)
-    rad <- sqrt(xx^2 + yy^2)
-    xp <- rad * cos(alpha + angle) + x
-    yp <- rad * sin(alpha + angle) + y
-
-    return(data.frame(x=xp,y=yp))
-  }
 
   #####################################################################
   #####################################################################
@@ -418,60 +337,75 @@ run_krm<-function(){
         xxy2 = xxy2%>%filter(xxy2$X %in% xxy$X)
         xxy = xxy%>%filter(xxy$X %in% xxy2$X)
         shp = data.frame(x=xxy$X, w=xxy2$dy, z_U=xxy$Ymax, z_L=xxy$Ymin)
+        # names(shp) = c(paste0("x_", fbn),
+        #                paste0("w_", fbn),
+        #                paste0("z_", fbn,"_U"),
+        #                paste0("z_", fbn,"_L"))
         return(shp)
       }
-      fb=get_shp(c1,c2,1)
+      #fb=get_shp(c1,c2,1)
+      fb = lapply(1:length(unique(c1$name)), FUN=function(x){
+        if(length(unique(c2$name) <= x)){
+          get_shp(c1,c2,x)}else{
+            get_shp(c1,c1,x)
+          }})
+      if(class(fb)=="list"){
+          nmax=max(sapply(fb, nrow)) #maximum rows
 
-      if(length(unique(c1$name))==2 & length(unique(c2$name))==2){
-        swb=get_shp(c1,c2,2)
-        swb2=NULL
-      }else if(length(unique(c1$name))==2 & length(unique(c2$name))==1){
-        swb=get_shp(c1,c1,2)
-        swb2=NULL
-      }else if(length(unique(c1$name))==3 & length(unique(c2$name))==3){
-        swb=get_shp(c1,c2,2)
-        swb2=get_shp(c1,c2,3)
-      }else{
-        swb=NULL
-        swb2=NULL
-      }
-
-      if(is.null(swb2)==F){
-        nr = max(nrow(fb),nrow(swb), nrow(swb2))
-        if(nrow(swb)<nr){
-          swb[(nrow(swb)+1):nr,]=NA
+          for(x in 1:length(fb)){fb[[x]] = pad_df(fb[[x]],nmax)}
+          fb = do.call("cbind", fb)
         }
-        if(nrow(swb2)<nr){
-          swb2[(nrow(swb2)+1):nr,]=NA
-        }
-        if(nrow(fb)<nr){
-          fb[(nrow(fb)+1):nr,]=NA
-        }
-        shpdf=data.frame(x_fb = fb$x, w_fb = fb$w,
-                         x_sb = swb$x, w_sb = swb$w,
-                         x_sb2 = swb2$x, w_sb2 = swb2$w,
-                         z_fbU = fb$z_U, z_fbL = fb$z_L,
-                         z_sbU = swb$z_U, z_sbL = swb$z_L,
-                         z_sbU2 = swb2$z_U, z_sbL2 = swb2$z_L)
-      }else if(is.null(swb)==F){
-        nr = max(nrow(fb),nrow(swb))
-        if(nrow(swb)<nr){
-          swb[(nrow(swb)+1):nr,]=NA
-        }
-        if(nrow(fb)<nr){
-          fb[(nrow(fb)+1):nr,]=NA
-        }
-        shpdf=data.frame(x_fb = fb$x, w_fb = fb$w,
-                         x_sb = swb$x, w_sb = swb$w,
-                         z_fbU = fb$z_U, z_fbL = fb$z_L,
-                         z_sbU = swb$z_U, z_sbL = swb$z_L)
-      }else{
-        shpdf=data.frame(x_fb = fb$x, w_fb = fb$w,
-                         z_fbU = fb$z_U, z_fbL = fb$z_L)
-      }
+#
+#       if(length(unique(c1$name))==2 & length(unique(c2$name))==2){
+#         swb=get_shp(c1,c2,2)
+#         swb2=NULL
+#       }else if(length(unique(c1$name))==2 & length(unique(c2$name))==1){
+#         swb=get_shp(c1,c1,2)
+#         swb2=NULL
+#       }else if(length(unique(c1$name))==3 & length(unique(c2$name))==3){
+#         swb=get_shp(c1,c2,2)
+#         swb2=get_shp(c1,c2,3)
+#       }else{
+#         swb=NULL
+#         swb2=NULL
+#       }
+#
+#       if(is.null(swb2)==F){
+#         nr = max(nrow(fb),nrow(swb), nrow(swb2))
+#         if(nrow(swb)<nr){
+#           swb[(nrow(swb)+1):nr,]=NA
+#         }
+#         if(nrow(swb2)<nr){
+#           swb2[(nrow(swb2)+1):nr,]=NA
+#         }
+#         if(nrow(fb)<nr){
+#           fb[(nrow(fb)+1):nr,]=NA
+#         }
+#         shpdf=data.frame(x_fb = fb$x, w_fb = fb$w,
+#                          x_sb = swb$x, w_sb = swb$w,
+#                          x_sb2 = swb2$x, w_sb2 = swb2$w,
+#                          z_fbU = fb$z_U, z_fbL = fb$z_L,
+#                          z_sbU = swb$z_U, z_sbL = swb$z_L,
+#                          z_sbU2 = swb2$z_U, z_sbL2 = swb2$z_L)
+      # }else if(is.null(swb)==F){
+      #   nr = max(nrow(fb),nrow(swb))
+      #   if(nrow(swb)<nr){
+      #     swb[(nrow(swb)+1):nr,]=NA
+      #   }
+      #   if(nrow(fb)<nr){
+      #     fb[(nrow(fb)+1):nr,]=NA
+      #   }
+      #   shpdf=data.frame(x_fb = fb$x, w_fb = fb$w,
+      #                    x_sb = swb$x, w_sb = swb$w,
+      #                    z_fbU = fb$z_U, z_fbL = fb$z_L,
+      #                    z_sbU = swb$z_U, z_sbL = swb$z_L)
+      # }else{
+      #   shpdf=data.frame(x_fb = fb$x, w_fb = fb$w,
+      #                    z_fbU = fb$z_U, z_fbL = fb$z_L)
+      # }
       #print(shpdf)
 
-      return(shpdf)
+      return(fb)
     })
 
     #download the KRM shape information as csv
@@ -480,7 +414,7 @@ run_krm<-function(){
         paste("KRMshp.csv", sep = "")
       },
       content = function(file) {
-        write.csv(gshp(), file, row.names = FALSE)
+       write.csv(gshp(), file, row.names = FALSE)
       }
     )
 
@@ -524,7 +458,7 @@ run_krm<-function(){
       if (is.null(inFile))
         return(NULL)
 
-      output$shp3D = renderPlotly(get_shp3d(inFile$datapath))
+      output$shp3D = renderPlotly(get_shp3d(read.csv(inFile$datapath)))
 
     })
 
@@ -540,28 +474,38 @@ run_krm<-function(){
         return(NULL)
 
       shpdf = read.csv(inFile$datapath)
-      for (v in c("x_fb", "x_sb","w_fb","w_sb","z_fbU","z_fbL","z_sbU","z_sbL")){
-        assign(v, if(v %in% names(shpdf)){shpdf[,v]}else{NULL})
-      }
-      TS =krm.sim(frequency = seq(input$freq_min, input$freq_max,length.out=input$freq_n) * 1000,
-                        c.w = input$cw,
-                        rho.w = input$rhow,
-                        theta=seq(input$theta_min, input$theta_max,length.out=input$theta_n),
-                        c.fb = input$cfb,
-                        c.sb = input$csb,
-                        rho.sb = input$rhosb,
-                        rho.fb = input$rhofb,
-                        L=seq(input$L_min, input$L_max,length.out=input$L_n),
-                        x_fb = x_fb[is.na(x_fb)==F],
-                        x_sb = x_sb[is.na(x_sb)==F],
-                        w_fb = w_fb[is.na(w_fb)==F],
-                        w_sb = w_sb[is.na(w_sb)==F],
-                        z_fbU = z_fbU[is.na(z_fbU)==F],
-                        z_fbL = z_fbL[is.na(z_fbL)==F],
-                        z_sbU = z_sbU[is.na(z_sbU)==F],
-                        z_sbL = z_sbL[is.na(z_sbL)==F],
-                        modsb = input$modsb,
-                        modsb2 = input$modsb2)
+      #for (v in c("x_fb", "x_sb","w_fb","w_sb","z_fbU","z_fbL","z_sbU","z_sbL")){
+      #  assign(v, if(v %in% names(shpdf)){shpdf[,v]}else{NULL})
+      #}
+      TS = krm(frequency = seq(input$freq_min, input$freq_max,length.out=input$freq_n) * 1000,
+               L=seq(input$L_min, input$L_max, length.out = input$L_n),
+               c.w = input$cw,
+               rho.w = input$rhow,
+               theta=seq(input$theta_min, input$theta_max,length.out=input$theta_n),
+               cs = c(input$cfb,input$csb),
+               rhos = c(input$rhofb,input$rhosb),
+               shape=shpdf,
+               modes=c("fluid", input$modsb)
+               )
+      # TS =krm.sim(frequency = seq(input$freq_min, input$freq_max,length.out=input$freq_n) * 1000,
+      #                   c.w = input$cw,
+      #                   rho.w = input$rhow,
+      #                   theta=seq(input$theta_min, input$theta_max,length.out=input$theta_n),
+      #                   c.fb = input$cfb,
+      #                   c.sb = input$csb,
+      #                   rho.sb = input$rhosb,
+      #                   rho.fb = input$rhofb,
+      #                   L=seq(input$L_min, input$L_max,length.out=input$L_n),
+      #                   x_fb = x_fb[is.na(x_fb)==F],
+      #                   x_sb = x_sb[is.na(x_sb)==F],
+      #                   w_fb = w_fb[is.na(w_fb)==F],
+      #                   w_sb = w_sb[is.na(w_sb)==F],
+      #                   z_fbU = z_fbU[is.na(z_fbU)==F],
+      #                   z_fbL = z_fbL[is.na(z_fbL)==F],
+      #                   z_sbU = z_sbU[is.na(z_sbU)==F],
+      #                   z_sbL = z_sbL[is.na(z_sbL)==F],
+      #                   modsb = input$modsb,
+      #                   modsb2 = input$modsb2)
       tsvalues$TS=TS
       showNotification("KRM simulation completed!")
       output$TStable <- DT::renderDataTable(TS)
@@ -612,4 +556,3 @@ run_krm<-function(){
   }
   shinyApp(ui, server)#
 }
-run_krm()
