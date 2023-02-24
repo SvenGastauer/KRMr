@@ -101,7 +101,7 @@ get_shp3d<-function(shape){
       fig <- fig %>% add_trace(data=fb,z = ~y, y = ~x, x = ~z, type = 'scatter3d', mode = 'lines',name=paste0("Shp_",nn))
     }
   }
-  scene = list(aspectmode='data', camera = list(eye = list(x = 1, y = -3, z =1.5) ))
+  scene = list(aspectmode='data', camera = list(eye = list(x = 1, y = 3, z =-1.5) ))
 
   return(  fig%>%layout(scene = scene))
 

@@ -186,7 +186,7 @@ Now we can have a look at the shape:
 shplot(x_fb = fb$x_fb, w_fb = fb$w_fb, x_sb = sb$x_sb, w_sb = sb$w_sb,z_fbU = fb$z_fbU,z_fbL = fb$z_fbL,z_sbU = sb$z_sbU,z_sbL = sb$z_sbL)
 ```
 
-```{r}
+```{r fig.width=7,fig.height=4}
 get_shp3d(list(pil_fb, pil_sb))
 ```
 Because we have defined the fishbody coordinates and the swimbladder coordinates in a dataframe, the most simple way to run one KRM simulation in KRMr is:
