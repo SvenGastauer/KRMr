@@ -10,7 +10,8 @@ Imagej2shp(
   lateral = c("Lateral_body", "Lateral_bladder"),
   body = 1,
   xy = c(1, 2),
-  nam = 3
+  nam = 3,
+  n = 0.01
 )
 }
 \arguments{

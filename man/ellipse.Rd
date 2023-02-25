@@ -4,7 +4,7 @@
 \alias{ellipse}
 \title{Get ellipse}
 \usage{
-ellipse(x = 0, y = 0, major = 1, minor = 1, theta = 0, nv = 10)
+ellipse(x = 0, y = 0, major = 1, minor = 1, theta = 0, nv = 30)
 }
 \arguments{
 \item{x}{start position x, defaults 0}

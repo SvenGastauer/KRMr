@@ -35,7 +35,7 @@ getxyz<-function(xxy,xxy2){
 #' @param theta rotaiton angle, defaults 0
 #' @param nv number of z points, defaults 10
 #' @export
-ellipse <- function (x=0, y=0, major = 1, minor = 1, theta = 0, nv = 10){
+ellipse <- function (x=0, y=0, major = 1, minor = 1, theta = 0, nv = 30){
   major=major/2
   minor=minor/2
   angle <- theta * pi/180
@@ -94,14 +94,14 @@ get_shp3d<-function(shape){
             minor=abs(shape[i,zU.ind[nn]] - shape[i,zL.ind[nn]]), nv=100) %>% mutate(z=shape[i,x.ind[nn]])
   }))
     if(nn==1){
-      fig=plot_ly(data=fb, z = ~y, y = ~x, x = ~z,
+      fig=plot_ly(data=fb, z = ~-y, y = ~x, x = ~z,
               #width=0.1,
               opacity=0.1, type = 'scatter3d', mode = 'lines', name='Shp_1')
     }else{
-      fig <- fig %>% add_trace(data=fb,z = ~y, y = ~x, x = ~z, type = 'scatter3d', mode = 'lines',name=paste0("Shp_",nn))
+      fig <- fig %>% add_trace(data=fb,z = ~-y, y = ~x, x = ~z, type = 'scatter3d', mode = 'lines',name=paste0("Shp_",nn))
     }
   }
-  scene = list(aspectmode='data', camera = list(eye = list(x = 1, y = 3, z =-1.5) ))
+  scene = list(aspectmode='data', camera = list(eye = list(x = 1.5, y = 2.2, z = 1) ))
 
   return(  fig%>%layout(scene = scene))
 

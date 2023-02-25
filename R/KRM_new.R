@@ -342,5 +342,6 @@ krm <- function(frequency =120 * 1000,
       sets$sigma = abs(rowSums(sets[,paste0("f", 1:nbp)]))
     }else{sets$sigma=abs(sets$f1)}
     sets$TS <- 20*log10(sets$sigma)
+    sets$L = sets$scale * max(x_fb) - min(x_fb)
     return(sets)
   }

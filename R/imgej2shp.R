@@ -68,7 +68,7 @@ getx=function(xy, n=0.01){
 #' @param xy position of the xy coordinates in the dataframe defaults c(1,2)
 #' @param nam position of name of the shape, defaults 3
 #' @export
-Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("Lateral_body", "Lateral_bladder"), body=1, xy=c(1,2), nam=3){
+Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("Lateral_body", "Lateral_bladder"), body=1, xy=c(1,2), nam=3, n=0.01){
 
   #rename columns
   names(shp)[xy] = c("x","y")
@@ -81,9 +81,10 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
   shp$xs=NA;shp$ys=NA
 
   #adjust dorsal
-  tmp = shp%>%filter(part==dorsal[body])%>%select(x,y)
+
   if(length(selp) != 0){
     for(i in selp){
+      tmp = shp%>%filter(part==dorsal[body])%>%select(x,y)
       tmp2 = shp%>%filter(part==dorsal[i])%>%select(x,y)
       tmp = range01img(tmp, tmp2)
       shp[shp$part == dorsal[i], c("xs","ys")] = tmp[[2]]
@@ -92,9 +93,9 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
   shp[shp$part == dorsal[body], c("xs","ys")] = tmp[[1]]
 
   #adjust lateral
-  tmp = shp%>%filter(part==lateral[body])%>%select(x,y)
   if(length(selp) != 0){
     for(i in selp){
+      tmp = shp%>%filter(part==lateral[body])%>%select(x,y)
       tmp2 = shp%>%filter(part==lateral[i])%>%select(x,y)
       tmp = range01img(tmp, tmp2)
       shp[shp$part == lateral[i], c("xs","ys")] = tmp[[2]]
@@ -104,8 +105,8 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
 
   get_shp=function(fbd,fbd2){
     #side view gives z, top view gives width
-    xxy=getx(fbd) #z low up
-    xxy2=getx(fbd2) # width
+    xxy=getx(fbd, n=n) #z low up
+    xxy2=getx(fbd2,n=n) # width
     xxy2 = xxy2%>%filter(xxy2$X %in% xxy$X)
     xxy = xxy%>%filter(xxy$X %in% xxy2$X)
     shp = data.frame(x=xxy$X, w=xxy2$dy, z_U=xxy$Ymax, z_L=xxy$Ymin)
