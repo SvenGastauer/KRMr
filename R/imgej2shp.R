@@ -78,6 +78,9 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
   selp = 1:length(dorsal)
   selp = selp[selp!=body]
 
+  shp$x=-shp$x
+  shp$y=-shp$y
+
   shp$xs=NA;shp$ys=NA
 
   #adjust dorsal
