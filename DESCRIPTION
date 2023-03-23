@@ -1,7 +1,7 @@
 Package: KRMr
 Type: Package
 Title: Kirchhoff Ray Mode Model for fisheries acoustics
-Version: 0.4.2
+Version: 0.4.5
 Author: Sven Gastauer
 Maintainer: Sven Gastauer <sven.gastauer@thuenen.de>
 Description: Run a KRM model or simulation of acoustic targets.
