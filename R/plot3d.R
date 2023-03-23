@@ -61,7 +61,7 @@ ellipse <- function (x=0, y=0, major = 1, minor = 1, theta = 0, nv = 30){
 #' @export
 #' @examples
 #' get_shp3d(list(data(pil_fb), data(pil_sb)))
-get_shp3d<-function(shape){
+get_shp3d<-function(shape,name="", domain=list(x=c(0,1),y=c(0,1)), scene=FALSE){
   #If shape is list, rbind into dataframe
   if(class(shape)=="list"){
     nmax=max(sapply(shape, nrow)) #maximum rows
@@ -94,15 +94,24 @@ get_shp3d<-function(shape){
             minor=abs(shape[i,zU.ind[nn]] - shape[i,zL.ind[nn]]), nv=100) %>% mutate(z=shape[i,x.ind[nn]])
   }))
     if(nn==1){
-      fig=plot_ly(data=fb, z = ~y, y = ~x, x = ~z,
+      if(scene==FALSE){
+        fig=plot_ly(data=fb, z = ~y, y = ~x, x = ~z,
               #width=0.1,
-              opacity=0.1, type = 'scatter3d', mode = 'lines', name='Shp_1')
+              opacity=0.1, type = 'scatter3d', mode = 'lines', name=name)
+      }else{
+        fig=plot_ly(data=fb, z = ~y, y = ~x, x = ~z,
+                    #width=0.1,
+                    opacity=0.1, type = 'scatter3d', mode = 'lines', name=name, scene=scene)
+      }
     }else{
-      fig <- fig %>% add_trace(data=fb,z = ~y, y = ~x, x = ~z, type = 'scatter3d', mode = 'lines',name=paste0("Shp_",nn))
+      fig <- fig %>% add_trace(data=fb,z = ~y, y = ~x, x = ~z, type = 'scatter3d', mode = 'lines',name=paste0(name,"_",nn))
     }
   }
-  scene = list(aspectmode='data', camera = list(eye = list(x = 1.5, y = 2.2, z = 1) ))
-
-  return(  fig%>%layout(scene = scene))
+  if(scene==FALSE){
+    sc = list(aspectmode='data', domain=domain )
+    return(  fig%>%layout(scene = sc))
+  }else{
+    return(fig)
+  }
 
 }

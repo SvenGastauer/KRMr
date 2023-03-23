@@ -259,6 +259,17 @@ krm <- function(frequency =120 * 1000,
     x.ind = grep("x", names(shape))
     w.ind = grep("w", names(shape))
 
+    rot=0
+
+    if(para$settings$theta > 180){
+      shape[,x.ind] = -shape[,x.ind]
+      shape[,zL.ind] = -shape[,zL.ind]
+      shape[,zU.ind] = -shape[,zU.ind]
+
+      para$settings$theta = para$settings$theta - 180
+      rot=1
+    }
+
     nbp = length(zL.ind) #number of body parts
     message(Sys.time(),":", nbp," Body parts detected with ", length(rhos), " densities and ", length (cs)," internal soundspeeds")
 
@@ -278,7 +289,7 @@ krm <- function(frequency =120 * 1000,
 
     if(is.null(L)){L = max(x_fb) - min(x_fb)}
     if(length(x_fb)>1){xv=x_fb}else{xv=x_sb}
-    para$settings$scale = ifelse(para$settings$L != (max(x_fb) - min(x_fb)),L / (max(x_fb) - min(x_fb)),1)
+    para$settings$scale = ifelse(para$settings$L != (max(x_fb) - min(x_fb)),para$settings$L / (max(x_fb) - min(x_fb)),1)
 
 
     ##############################################
@@ -343,5 +354,6 @@ krm <- function(frequency =120 * 1000,
     }else{sets$sigma=abs(sets$f1)}
     sets$TS <- 20*log10(sets$sigma)
     sets$L = sets$scale * max(x_fb) - min(x_fb)
+    sets$theta = sets$theta + rot * 180
     return(sets)
   }

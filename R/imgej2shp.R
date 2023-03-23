@@ -40,6 +40,8 @@ getx=function(xy, n=0.01){
   i1=sf::st_intersection(table_xy,spol)
 
   ixy=data.frame()
+  i1$geo=sapply(1:nrow(i1), FUN=function(o)class(i1$geometry[o])[1])
+  i1=i1%>%filter(geo!="sfc_GEOMETRYCOLLECTION")
 
   for(x in 1:length(i1$geometry)){
     tmp=data.frame(st_coordinates(i1$geometry[x][1]))
@@ -92,6 +94,10 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
       tmp = range01img(tmp, tmp2)
       shp[shp$part == dorsal[i], c("xs","ys")] = tmp[[2]]
     }
+  }else{
+    tmp = shp%>%filter(part==dorsal[body])%>%select(x,y)
+    tmp2 = shp%>%filter(part==dorsal[i])%>%select(x,y)
+    tmp = range01img(tmp, tmp2)
   }
   shp[shp$part == dorsal[body], c("xs","ys")] = tmp[[1]]
 
@@ -103,6 +109,10 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
       tmp = range01img(tmp, tmp2)
       shp[shp$part == lateral[i], c("xs","ys")] = tmp[[2]]
     }
+  }else{
+    tmp = shp%>%filter(part==lateral[body])%>%select(x,y)
+    tmp2 = shp%>%filter(part==lateral[i])%>%select(x,y)
+    tmp = range01img(tmp, tmp2)
   }
   shp[shp$part == lateral[body], c("xs","ys")] = tmp[[1]]
 
@@ -115,10 +125,14 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
     shp = data.frame(x=xxy$X, w=xxy2$dy, z_U=xxy$Ymax, z_L=xxy$Ymin)
     return(shp)
   }
-  fb=get_shp(shp[shp$part==lateral[body], c("xs","ys")], shp[shp$part==dorsal[body], c("xs","ys")])
+  fb=get_shp(fbd=shp[shp$part==lateral[body], c("xs","ys")],
+             fbd2=shp[shp$part==dorsal[body], c("xs","ys")])
   if(length(selp>0)){
     shape = list(fb)
-    parts = lapply(selp, FUN = function(x) get_shp(shp[shp$part==lateral[x], c("xs","ys")], shp[shp$part==dorsal[x], c("xs","ys")]))
+    parts = lapply(selp, FUN = function(x) get_shp(shp[shp$part==lateral[x],
+                                                       c("xs","ys")],
+                                                   shp[shp$part==dorsal[x],
+                                                       c("xs","ys")]))
     for(k in 1:length(selp)){
       shape[[k+1]] = parts[[k]]
     }
