@@ -4,7 +4,12 @@
 \alias{get_shp3d}
 \title{Get 3d shape plot}
 \usage{
-get_shp3d(shape)
+get_shp3d(
+  shape,
+  name = "",
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  scene = FALSE
+)
 }
 \arguments{
 \item{shape}{list or dataframe containing the shape information}

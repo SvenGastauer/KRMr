@@ -1,0 +1,251 @@
+---
+title: "KRM - Benchmark, fluid sphere and sardine"
+author: "Sven Gastauer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{KRM - Benchmark, fluid sphere and sardine}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(ggplot2)
+library(KRMr)
+```
+
+Testing the KRMr implementation of the KRM - Kirchhoff Ray Mode - model, based on equations described in detail in 'Acoustic models of fish: The Atlantic cod (Gadus morhua)' by Clay and Horne, 1994.  
+
+The KRM and the underlying scattering theory holds validity for high frequencies (>>> resonance freqeuncy) and for incident angles between 65 and 115 degrees.  
+
+Shapes are approximated shapes through a series of cylinders. x coordinates are the along body coordinates (major axis of an ellipsoid) z coordinates are the upper and lower coordinates at position x (the upper and lower values of the minor axis). w defines the width frpm a top view along the body axis.  
+
+The model is split in two parts:  
+1) The Swimbladder (or gas bubble) part  
+2) The Fish body (or fluid like) part
+
+## Weakly scattering fluid Sphere
+To approximate scattering by a fluid sphere through the KRM mo9del, we set the swimbladder part to 0 and only consider the Fish body part.  
+We first define the sphere parameters:  
+
+```{r wfs_parameters}
+#library(KRMr)
+#Define the the sphere parameters
+freqs = 10:400 * 1000 #Hz frequencies to be considered in Hz
+a = 0.01 #m radius of the sphere
+cw = 1477.4 #m/s sound speed surrounding water
+cfb =  1480.3 #m/s soundspeed inside the sphere
+rhow = 1026.8 #kg/m3 density surrounding water
+rhofb = 1028.9 #kg/m3 density fluid inside sphere
+
+```
+
+Now we can construct shape information that is understood by the KRM model:  
+
+```{r Generate_Sphere_shape, fig.width=7,fig.height=6}
+#generate sphere coordinates
+ang = seq(-90,90,length.out=30) #angles to consider
+shape=data.frame(
+  xfb = sin(ang * pi / 180), #x coordinates of a sphere
+  wfb = (2*cos(ang * pi / 180)), #diameter of the sphere
+  zfbU = cos(ang * pi / 180), #upper z coordinates
+  zfbL = -cos(ang * pi / 180)) #lower z coordiates
+
+shplot(x_fb = shape$xfb,w_fb = shape$wfb,z_fbU = shape$zfbU, z_fbL=shape$zfbL)
+
+```
+
+Plot in 3D:
+```{r}
+get_shp3d(shape)
+```
+Now we can run the KRM simulation:  
+
+```{r KRM_simulation_wfs}
+kfs = krm(frequency =freqs,
+              c.w = cw,
+              rho.w = rhow,
+              theta=90,
+              cs = cfb,
+              rhos = rhofb,
+              modes="fluid",
+              L=0.02,
+              shape=shape)
+```
+
+
+We will use the analytical solution of the scattering by a fluid sphere as descirbed in Jech et al. 2015, modified from Anderson (1950).
+
+*Jech, J. M., Horne, J. K., Chu, D., Demer, D. A., Francis, D. T., Gorska, N., ... & Reeder, D. B. (2015)."Comparisons among ten models of acoustic backscattering used in aquatic ecosystem research." The Journal of the Acoustical Society of America, 138(6), 3742-3764.  
+Anderson, V. C. (1950). "Sound scattering from a fluid sphere." The Journal of the Acoustical Society of America, 22(4), 426-431.*
+
+```{r Analytical_Sphere_wfs}
+kfs$bench=sapply(freqs,
+                 function(f){
+                   fsphere(f,a,cw,cfb/cw,
+                             rhofb/rhow)})
+```
+
+
+Plotting the results:  
+
+```{r wfs_results, fig.width=7,fig.height=6}
+colors <- c("Analytical" = "red", "KRM" = "blue")
+
+ggplot2::ggplot()+
+  ggplot2::geom_line(data=kfs, ggplot2::aes(x=frequency/1000,y=TS, group=L,col='KRM'),lwd=1)+
+  ggplot2::geom_line(data=kfs, ggplot2::aes(x=frequency/1000, group=L, y=bench,col='Analytical'), lty=2,lwd=1)+
+  ggplot2::scale_color_manual(values = colors, name='')+
+  ggplot2::xlab('Frequency (kHz)')+
+  ggplot2::ylab('Target Strength (dB re m-2)')+
+  ggplot2::theme_classic()+
+  ggplot2::theme(text=ggplot2::element_text(size=16),
+        legend.position='top')
+
+```
+
+## Gas filled fluid sphere
+
+```{r gfs_parameters}
+
+#Define the the sphere parameters
+freqs = seq(12,400,1) * 1000 #Hz frequencies to be considered in Hz
+a = 0.01 #m radius of the sphere
+cw = 1477.4 #m/s sound speed surrounding water
+cfb =  345.0 #m/s soundspeed inside the sphere
+rhow = 1026.8 #kg/m3 density surrounding water
+rhofb = 1.24 #kg/m3 density fluid inside sphere
+
+```
+
+
+Now we can run the KRM simulation:  
+
+```{r KRM_simulation_gfs}
+kfs = krm(frequency =freqs,
+              c.w = cw,
+              rho.w = rhow,
+              theta=90,
+              cs = cfb,
+              rhos = rhofb,
+              L=0.02,
+              modes="soft",
+              shape=shape)
+```
+
+
+We will use the analytical solution of the scattering by a fluid sphere as descirbed in Jech et al. 2015, modified from Anderson (1950).
+
+*Jech, J. M., Horne, J. K., Chu, D., Demer, D. A., Francis, D. T., Gorska, N., ... & Reeder, D. B. (2015)."Comparisons among ten models of acoustic backscattering used in aquatic ecosystem research." The Journal of the Acoustical Society of America, 138(6), 3742-3764.  
+Anderson, V. C. (1950). "Sound scattering from a fluid sphere." The Journal of the Acoustical Society of America, 22(4), 426-431.*
+
+```{r Analytical_Sphere_gfs}
+kfs$bench=sapply(freqs,
+                 function(f){
+                   fsphere(f,a,cw,cfb/cw,
+                             rhofb/rhow)})
+```
+
+
+Plotting the results:  
+
+```{r gfs_results, fig.width=7,fig.height=6}
+colors <- c("Analytical" = "red", "KRM" = "blue")
+
+ggplot2::ggplot()+
+  ggplot2::geom_line(data=kfs, ggplot2::aes(x=frequency/1000,y=TS, group=L,col='KRM'),lwd=1)+
+  ggplot2::geom_line(data=kfs, ggplot2::aes(x=frequency/1000, group=L, y=bench,col='Analytical'), lty=2,lwd=1)+
+  ggplot2::scale_color_manual(values = colors, name='')+
+  scale_y_continuous(limits=c(-50,-40))+
+  ggplot2::xlab('Frequency (kHz)')+
+  ggplot2::ylab('Target Strength (dB re m-2)')+
+  ggplot2::theme_classic()+
+  ggplot2::theme(text=ggplot2::element_text(size=16),
+        legend.position='top')
+
+```
+
+## Sardine (like)
+
+First we define the shape of a sardine like fish. Here we take the sardine shape profile from the [NOAA SWFSC website](https://swfscdata.nmfs.noaa.gov/AST/KRM/krm.html).  
+
+```{r}
+#Sardine
+data(pil_fb) #fish body sardine
+fb=pil_fb
+data(pil_sb) #swimbladder sardine
+sb=pil_sb
+```
+
+Now we can have a look at the shape:  
+```{r fig.width=7,fig.height=3}
+shplot(x_fb = fb$x_fb, w_fb = fb$w_fb, x_sb = sb$x_sb, w_sb = sb$w_sb,z_fbU = fb$z_fbU,z_fbL = fb$z_fbL,z_sbU = sb$z_sbU,z_sbL = sb$z_sbL)
+```
+
+```{r fig.width=7,fig.height=4}
+get_shp3d(list(pil_fb, pil_sb))
+```
+Because we have defined the fishbody coordinates and the swimbladder coordinates in a dataframe, the most simple way to run one KRM simulation in KRMr is:
+
+```{r}
+krm(shape = list(fb, sb))
+```
+
+
+Now we are ready to run a KRM simulation. Let's have a look at the TS for a 21 cm sardine from 120 to 200 kHz. Here we will define the different coordinates separately and add the parameters we want to simulate:  
+
+```{r}
+TS = krm(frequency =seq(20,200.1) * 1000,
+         c.w = 1490,
+         rho.w = 1030,
+         theta=90,
+         cs = c(1570, 345),
+         rhos = c(1070,1.24),
+         L=0.21,
+         shape=list(fb,sb))
+```
+
+
+Plot the results:
+
+```{r fig.width=7,fig.height=3}
+plot(TS$frequency/1000, 
+     TS$TS, 
+     type='l',
+     xlab='Frequency (kHz)', 
+     ylab=expression(TS~'('~dB~re~ m^-2~')'))
+```
+
+We can also run a simulation over multiple parameters, for example frequencies from 120-200 kHz and incident angles from 65-115 degrees:  
+
+```{r}
+TS = krm(frequency =seq(120,200.1) * 1000,
+         c.w = 1490,
+         rho.w = 1030,
+         theta=65:115,
+         cs = c(1570, 345),
+         rhos = c(1070,1.24),
+         L=0.21,
+         shape=list(fb,sb))
+```
+
+
+We can for example use ggplot2 to plot a 2D map of the results:
+
+```{r , fig.width=7,fig.height=6}
+ggplot2::ggplot(data=TS, ggplot2::aes(x= frequency/1000, y= theta, fill=TS))+
+  ggplot2::geom_tile()+
+  ggplot2::scale_fill_viridis_c(expression(TS~'('~dB~re~ m^-1~')'))+
+  ggplot2::xlab('Frequency (kHz)')+
+  ggplot2::ylab(expression(theta~'(°)'))+
+  ggplot2::scale_x_continuous(expand=c(0,0))+
+  ggplot2::scale_y_continuous(expand=c(0,0))+
+  ggplot2::theme_classic()+
+  ggplot2::theme(legend.position='top',
+        legend.text=element_text(angle=45),
+        text=element_text(size=16))
+```
