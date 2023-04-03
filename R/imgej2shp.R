@@ -96,7 +96,7 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
     }
   }else{
     tmp = shp%>%filter(part==dorsal[body])%>%select(x,y)
-    tmp2 = shp%>%filter(part==dorsal[i])%>%select(x,y)
+    tmp2 = shp%>%filter(part==dorsal[1])%>%select(x,y)
     tmp = range01img(tmp, tmp2)
   }
   shp[shp$part == dorsal[body], c("xs","ys")] = tmp[[1]]
@@ -111,7 +111,7 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
     }
   }else{
     tmp = shp%>%filter(part==lateral[body])%>%select(x,y)
-    tmp2 = shp%>%filter(part==lateral[i])%>%select(x,y)
+    tmp2 = shp%>%filter(part==lateral[1])%>%select(x,y)
     tmp = range01img(tmp, tmp2)
   }
   shp[shp$part == lateral[body], c("xs","ys")] = tmp[[1]]
@@ -127,7 +127,7 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
   }
   fb=get_shp(fbd=shp[shp$part==lateral[body], c("xs","ys")],
              fbd2=shp[shp$part==dorsal[body], c("xs","ys")])
-  if(length(selp>0)){
+  if(length(selp)>0){
     shape = list(fb)
     parts = lapply(selp, FUN = function(x) get_shp(shp[shp$part==lateral[x],
                                                        c("xs","ys")],
