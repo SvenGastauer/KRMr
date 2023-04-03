@@ -18,7 +18,7 @@ The *KRMr* package includes example shape data for sardines found on the [NOAA S
 The shape can also be plotted:  
 
 ```{r pot_sardine_shp, warning=FALSE, fig.width=8}
-library(KRMr)
+#library(KRMr)
 library(knitr)
 
 data(pil_sb)

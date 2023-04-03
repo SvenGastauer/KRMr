@@ -261,10 +261,11 @@ krm <- function(frequency =120 * 1000,
 
     rot=0
 
-    if(para$settings$theta > 180){
-      shape[,x.ind] = -shape[,x.ind]
-      shape[,zL.ind] = -shape[,zL.ind]
-      shape[,zU.ind] = -shape[,zU.ind]
+    if(any(para$settings$theta > 180)){
+      thetasel=para$settings$theta > 180
+      shape[thetasel,x.ind] = -shape[thetasel,x.ind]
+      shape[thetasel,zL.ind] = -shape[thetasel,zL.ind]
+      shape[thetasel,zU.ind] = -shape[thetasel,zU.ind]
 
       para$settings$theta = para$settings$theta - 180
       rot=1
