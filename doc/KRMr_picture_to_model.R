@@ -26,6 +26,7 @@ krm(
 
 ## ----read_imj, eval=FALSE-----------------------------------------------------
 #  library(RImageJROI)
+#  fn = './HER.zip'
 #  side = RImageJROI::read.ijzip(fn) #fn should be the filename and path to the ROI.zip file
 #  shapes = lapply(side, FUN=function(x){
 #    tmp=data.frame(x$coords)
@@ -33,7 +34,7 @@ krm(
 #    return(tmp)})
 
 ## ----pollock, warning=F, fig.width=12, , message=FALSE------------------------
-shp1 = KRMr::Imagej2shp(shp=read.csv("Pollock01.csv"))
+shp1 = KRMr::Imagej2shp(shp=read.csv("./Pollock01.csv"))
 KRMr::get_shp3d(shp1)
 
 
@@ -70,7 +71,7 @@ knitr::kable(krm1)
 
 ## ----HERRING_rd, message=FALSE------------------------------------------------
 fn = "HER.zip" # Path to the ImageJ ROI.zip file
-top = read.table("HER_body_top.txt") # Read the only avaialble top view file
+top = read.table("./HER_body_top.txt") # Read the only avaialble top view file
 
 library(RImageJROI)
 side = RImageJROI::read.ijzip(fn)
