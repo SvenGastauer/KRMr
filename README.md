@@ -12,13 +12,13 @@ Based on the model description found in Clay, C. S., & Horne, J. K. (1994).
 Notes on model validity:  The KRM model is only valid for incident angles between 65° and 115° (i.e. +/- 25° from incidence).  
 
 Current features of the package:
-- Model fish with one or two swimbladders / internal features
+- Model fish with swimbladders / internal features
 - Select soft or fluid model for internal features
 - shiny app for easy feature extraction from X Rays or Pictures and translation into KRM shape files (experimental)
+- Translate xyz (for example as extracted from ImageJ) into KRM shape files  
 
 To be done:
 - Document shiny app
-- Allow user to add arbitrary number internal features
 
 | Model       | Accuracy / Type           | Range of Validity  | Limitations  | Examples  |
 |---|---|---|---|---|
