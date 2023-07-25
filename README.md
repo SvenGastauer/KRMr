@@ -105,6 +105,7 @@ Please cite this package as:
     author = {Sven Gastauer},
     year = {2023},
     note = {R package version 0.4.6},
+    DOI =  {10.5281/zenodo.7795866}
   }
   ```
 View citation in R:
