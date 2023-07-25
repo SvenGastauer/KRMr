@@ -1,8 +1,9 @@
 # KRMr
-Kichhoff-Ray Mode Model for fish in R
+Kichhoff-Ray Mode Model for fish in R  
 
-<a href="https://www.thuenen.de/de/fachinstitute/seefischerei"><img src=https://github.com/SvenGastauer/KRMr/blob/main/thuenen_logo.png width="200"> </a>  
-Sven Gastauer, Febraury 2023, [Thünen Institute for Sea Fisheries](https://www.thuenen.de/de/fachinstitute/seefischerei)
+<a href="https://www.thuenen.de/de/fachinstitute/seefischerei"><img src=https://github.com/SvenGastauer/KRMr/blob/main/thuenen_logo.png width="200"> </a>    
+Sven Gastauer, Febraury 2023, [Thünen Institute for Sea Fisheries](https://www.thuenen.de/de/fachinstitute/seefischerei)  
+[![DOI](https://zenodo.org/badge/602591946.svg)](https://zenodo.org/badge/latestdoi/602591946)
 
 
 ## Description
@@ -103,7 +104,7 @@ Please cite this package as:
     title = {KRMr: Kirchhoff Ray Mode Model for fisheries acoustics},
     author = {Sven Gastauer},
     year = {2023},
-    note = {R package version 0.3.0},
+    note = {R package version 0.4.6},
   }
   ```
 View citation in R:
