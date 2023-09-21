@@ -125,4 +125,6 @@ If none of those options seem appropriate and you are getting really desperate, 
 
 ## Publications using KRMr
 
-TBA
+
+- Yang Yang, Sven Gastauer, Roland Proud, Richard Mangeni-Sande, Inigo Everson, Robert J Kayanda, Andrew S Brierley, Modelling and in situ observation of broadband acoustic scattering from the Silver cyprinid (Rastrineobola argentea) in Lake Victoria, East Africa, ICES Journal of Marine Science, 2023;, fsad137, [https://doi.org/10.1093/icesjms/fsad137](https://doi.org/10.1093/icesjms/fsad137)
+- Palermino, A., De Felice, A., Canduci, G. et al. Application of an analytical approach to characterize the target strength of ancillary pelagic fish species. Sci Rep 13, 15182 (2023). [https://doi.org/10.1038/s41598-023-42326-4](https://doi.org/10.1038/s41598-023-42326-4)
