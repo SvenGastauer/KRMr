@@ -61,7 +61,7 @@ ellipse <- function (x=0, y=0, major = 1, minor = 1, theta = 0, nv = 30){
 #' @export
 #' @examples
 #' get_shp3d(list(data(pil_fb), data(pil_sb)))
-get_shp3d<-function(shape,name="", domain=list(x=c(0,1),y=c(0,1)), scene=FALSE){
+get_shp3d<-function(shape,name="", domain=list(x=c(0,1),y=c(0,1)), scene=FALSE, out=FALSE){
   #If shape is list, rbind into dataframe
   if(class(shape)=="list"){
     nmax=max(sapply(shape, nrow)) #maximum rows
@@ -86,6 +86,7 @@ get_shp3d<-function(shape,name="", domain=list(x=c(0,1),y=c(0,1)), scene=FALSE){
   nbp = length(zL.ind) #number of body parts
   message(Sys.time(),":", nbp," Body parts detected")
 
+
   for(nn in 1:nbp){
     fb=do.call('rbind',lapply(1:length((shape[,x.ind[nn]])), FUN=function(i){
     ellipse(x=0,
@@ -106,12 +107,32 @@ get_shp3d<-function(shape,name="", domain=list(x=c(0,1),y=c(0,1)), scene=FALSE){
     }else{
       fig <- fig %>% add_trace(data=fb,z = ~y, y = ~x, x = ~z, type = 'scatter3d', mode = 'lines',name=paste0(name,"_",nn))
     }
+
+  if(out==TRUE){
+    #if(exists('xyz')==FALSE){xyz=data.frame()}
+    if(nn==1){xyz=data.frame()}
+    #print(name)
+    fb = data.frame(fb)
+    fb$shape = paste0("part_",nn)
+    #print(head(fb))
+    xyz=rbind(xyz,fb)
   }
-  if(scene==FALSE){
-    sc = list(aspectmode='data', domain=domain )
-    return(  fig%>%layout(scene = sc))
-  }else{
-    return(fig)
   }
 
+
+  if(scene==FALSE){
+    sc = list(aspectmode='data', domain=domain )
+    if(out==TRUE){
+      return(  list(fig%>%layout(scene = sc),xyz))
+    }else{
+      return(  fig%>%layout(scene = sc))
+      }
+    }else{
+      if(out==TRUE){
+        return(list(fig,xyz))
+      }else{
+        return(fig)
+      }
+    }
 }
+

@@ -261,11 +261,10 @@ krm <- function(frequency =120 * 1000,
 
     rot=0
 
-    if(any(para$settings$theta > 180)){
-      thetasel=para$settings$theta > 180
-      shape[thetasel,x.ind] = -shape[thetasel,x.ind]
-      shape[thetasel,zL.ind] = -shape[thetasel,zL.ind]
-      shape[thetasel,zU.ind] = -shape[thetasel,zU.ind]
+    if(para$settings$theta > 180){
+      shape[,x.ind] = -shape[,x.ind]
+      shape[,zL.ind] = -shape[,zL.ind]
+      shape[,zU.ind] = -shape[,zU.ind]
 
       para$settings$theta = para$settings$theta - 180
       rot=1
@@ -291,7 +290,6 @@ krm <- function(frequency =120 * 1000,
     if(is.null(L)){L = max(x_fb) - min(x_fb)}
     if(length(x_fb)>1){xv=x_fb}else{xv=x_sb}
     para$settings$scale = ifelse(para$settings$L != (max(x_fb) - min(x_fb)),para$settings$L / (max(x_fb) - min(x_fb)),1)
-
 
     ##############################################
     #Start modelling
