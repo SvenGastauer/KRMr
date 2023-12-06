@@ -8,7 +8,8 @@ get_shp3d(
   shape,
   name = "",
   domain = list(x = c(0, 1), y = c(0, 1)),
-  scene = FALSE
+  scene = FALSE,
+  out = FALSE
 )
 }
 \arguments{
