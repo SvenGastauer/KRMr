@@ -119,9 +119,131 @@ If none of those options seem appropriate and you are getting really desperate, 
 
 ## Example
 
+### Fluid sphere  
+
+Defining the the sphere parameters:  
+```
+freqs = 10:400 * 1000 #Hz frequencies to be considered in Hz
+a = 0.01 #m radius of the sphere
+cw = 1477.4 #m/s sound speed surrounding water
+cfb =  1480.3 #m/s soundspeed inside the sphere
+rhow = 1026.8 #kg/m3 density surrounding water
+rhofb = 1028.9 #kg/m3 density fluid inside sphere
+```
+
+Construct the shape information of the sphere:  
+```
+ang = seq(-90,90,length.out=30) #angles to consider
+shape=data.frame(
+  xfb = sin(ang * pi / 180), #x coordinates of a sphere
+  wfb = (2*cos(ang * pi / 180)), #diameter of the sphere
+  zfbU = cos(ang * pi / 180), #upper z coordinates
+  zfbL = -cos(ang * pi / 180)) #lower z coordiates
+
+KRMr::shplot(x_fb = shape$xfb,w_fb = shape$wfb,z_fbU = shape$zfbU, z_fbL=shape$zfbL)
+```
+
+Plot in 3D:
+```
+KRMr::get_shp3d(shape)
+```
+Now we can run the KRM simulation:  
+
+```
+kfs = KRMr::krm(frequency =freqs,
+              c.w = cw,
+              rho.w = rhow,
+              theta=90,
+              cs = cfb,
+              rhos = rhofb,
+              modes="fluid",
+              L=0.02,
+              shape=shape)
+```
+
+### Sardine  
+
+First we define the shape of a sardine like fish. Here we take the sardine shape profile from the [NOAA SWFSC website](https://swfscdata.nmfs.noaa.gov/AST/KRM/krm.html).  
+
+```
+#Sardine
+fb = KRMr::pil_fb #fish body sardine
+sb = KRMr::pil_sb #swimbladder sardine
+```
+
+Now we can have a look at the shape:  
+```
+KRMr::shplot(x_fb = fb$x_fb, w_fb = fb$w_fb, x_sb = sb$x_sb, w_sb = sb$w_sb,z_fbU = fb$z_fbU,z_fbL = fb$z_fbL,z_sbU = sb$z_sbU,z_sbL = sb$z_sbL)
+```
+
+```
+KRMr::get_shp3d(list(fb, sb))
+```
+Because we have defined the fishbody coordinates and the swimbladder coordinates in a dataframe, the most simple way to run one KRM simulation in KRMr is:
+
+```
+KRMr::krm(shape = list(fb, sb))
+```
+
+
+Now we are ready to run a KRM simulation. Let's have a look at the TS for a 21 cm sardine from 120 to 200 kHz. Here we will define the different coordinates separately and add the parameters we want to simulate:  
+
+```
+TS = KRMr::krm(frequency =seq(20,200.1) * 1000,
+         c.w = 1490,
+         rho.w = 1030,
+         theta=90,
+         cs = c(1570, 345),
+         rhos = c(1070,1.24),
+         L=0.21,
+         shape=list(fb,sb))
+```
+
+
+Plot the results:
+
+```
+plot(TS$frequency/1000, 
+     TS$TS, 
+     type='l',
+     xlab='Frequency (kHz)', 
+     ylab=expression(TS~'('~dB~re~ m^-2~')'))
+```
+
+We can also run a simulation over multiple parameters, for example frequencies from 120-200 kHz and incident angles from 65-115 degrees:  
+
+```
+TS = KRMr::krm(frequency =seq(120,200.1) * 1000,
+         c.w = 1490,
+         rho.w = 1030,
+         theta=65:115,
+         cs = c(1570, 345),
+         rhos = c(1070,1.24),
+         L=0.21,
+         shape=list(fb,sb))
+```
+
+
+We can for example use ggplot2 to plot a 2D map of the results:
+
+```
+ggplot2::ggplot(data=TS, ggplot2::aes(x= frequency/1000, y= theta, fill=TS))+
+  ggplot2::geom_tile()+
+  ggplot2::scale_fill_viridis_c(expression(TS~'('~dB~re~ m^-1~')'))+
+  ggplot2::xlab('Frequency (kHz)')+
+  ggplot2::ylab(expression(theta~'(°)'))+
+  ggplot2::scale_x_continuous(expand=c(0,0))+
+  ggplot2::scale_y_continuous(expand=c(0,0))+
+  ggplot2::theme_classic()+
+  ggplot2::theme(legend.position='top',
+        legend.text=element_text(angle=45),
+        text=element_text(size=16))
+```
+
+
 ### Orientation
 ![KRM Orientatio](https://github.com/SvenGastauer/KRMr/blob/main/inst/extdata/orientation.png)  
-90° corresponds to braodside incidence. Rememmber that the model is only valid for angles between 65 and 115° (+/- 25° from broadside incidence).  
+90° corresponds to braodside incidence. Remember that the model is only valid for angles between 65 and 115° (+/- 25° from broadside incidence).  
 
 ## Publications using KRMr
 
