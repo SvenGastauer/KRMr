@@ -2,7 +2,7 @@
 Kichhoff-Ray Mode Model for fish in R  
 
 <a href="https://www.thuenen.de/de/fachinstitute/seefischerei"><img src=https://github.com/SvenGastauer/KRMr/blob/main/thuenen_logo.png width="200"> </a>    
-Sven Gastauer, Febraury 2023, [Thünen Institute for Sea Fisheries](https://www.thuenen.de/de/fachinstitute/seefischerei)  
+Sven Gastauer, February 2023, [Thünen Institute for Sea Fisheries](https://www.thuenen.de/de/fachinstitute/seefischerei)  
 [![DOI](https://zenodo.org/badge/602591946.svg)](https://zenodo.org/badge/latestdoi/602591946)
 
 
