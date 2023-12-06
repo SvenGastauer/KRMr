@@ -23,9 +23,9 @@ In our special case the csv files contain two different fish body and swimbladde
 
 ```{r}
 library(dplyr)
-library(KRMr)
-data(stb_fb) #fish body shapes of a few stickleback
-data(stb_sb) #swimbladder shape of a few sticklback
+#library(KRMr)
+stb_fb = KRMr::stb_fb #fish body shapes of a few stickleback
+stb_sb = KRMr::stb_sb #swimbladder shape of a few sticklback
 ```
 
 ```{r}
@@ -157,7 +157,7 @@ ggplot(data=TS,
 We can also compute slightly more sophisticated simulations of a range of frequencies, lengths and orientations (remermbe the KRM model is only valid for orientations, close to 90 degrees ~65-115 degrees):  
 
 ```{r}
-TS = krm.sim(frequency =c(38,70,120,200) * 1000,
+TS = KRMr::krm.sim(frequency =c(38,70,120,200) * 1000,
                    c.w = 1490,
                    rho.w = 1030,
                    theta=seq(65,115),
@@ -198,7 +198,7 @@ ggplot2::ggplot(data=TS, ggplot2::aes(x= theta, y=L*1000 , z=TS))+
 Let's do the same without a swimbladder for a hypothetical fish without swimbladder (we simply assign the swimbladder coordinates NULL) for fish sizes of 1 cm to 10 cm without swimbladder:  
 
 ```{r}
-TS = krm.sim(frequency =c(38,70,120,200) * 1000,
+TS = KRMr::krm.sim(frequency =c(38,70,120,200) * 1000,
                    c.w = 1490,
                    rho.w = 1030,
                    theta=seq(65,115),
@@ -239,7 +239,7 @@ ggplot2::ggplot(data=TS, ggplot2::aes(x= theta, y=L*1000 , z=TS))+
 We can also look at orientation plots for a fish of 5 cm without a swimbladder at 38 kHz:  
 
 ```{r fig.width = 8, fig.height = 8}
-TSrot = krm.sim(frequency =c(38,200) * 1000,
+TSrot = KRMr::krm.sim(frequency =c(38,200) * 1000,
                    c.w = 1490,
                    rho.w = 1030,
                    theta=65:115,

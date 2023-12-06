@@ -18,11 +18,10 @@ The *KRMr* package includes example shape data for sardines found on the [NOAA S
 The shape can also be plotted:  
 
 ```{r pot_sardine_shp, warning=FALSE, fig.width=8}
-library(KRMr)
 library(knitr)
 
-data(pil_sb)
-data(pil_fb)
+pil_sb = KRMr::pil_sb
+pil_fb = KRMr::pil_fb
 par(mfrow=c(1,2))
 KRMr::shplot(x_fb = pil_fb$x_fb, w_fb = pil_fb$w_fb,
             z_fbU = pil_fb$z_fbU, z_fbL = pil_fb$z_fbL,
@@ -39,7 +38,7 @@ The *KRMr* implementation of the Kirchhoff Ray Mode model takes several input pa
 
 
 ```{r krm_sardine example}
-krm(
+KRMr::krm(
   frequency = 120 * 1000,
   c.w = 1490,
   rho.w = 1030,
@@ -162,7 +161,7 @@ rhos = c(rho.fb, rho.b)
 
 L = 29.7/1e2 #Lengths for pollocks in m
 
-krm1 = krm(frequency = frequency,
+krm1 = KRMr::krm(frequency = frequency,
       c.w = c.w,
       rho.w = rho.w,
       theta = theta,
@@ -201,7 +200,7 @@ shapes = lapply(side, FUN=function(x){ #load all side view coordinates into a li
   return(tmp)})
 ```
 
-WHat shape side views information is available?  
+What shape side views information is available?  
 
 ```{r HERRING_sav, fig.width=8, message=FALSE}
  par(mfrow=c(3,4), mar=c(1,1,1,1)) #have a quick look at the available shapes
@@ -257,7 +256,7 @@ for(i in seq(1,length(side), by=2)){
   bi=sprintf("%02d", k)
   #write.csv(shp,paste0("HER_",bi,"_shp.csv"))
 
-  shape=Imagej2shp(shp=shp,dorsal = c("Body Top","SwB Top") ,
+  shape=KRMr::Imagej2shp(shp=shp,dorsal = c("Body Top","SwB Top") ,
                    lateral = c(unique(shp$Part)[1],unique(shp$Part)[2]),
                    body=1, xy=c(1,2), nam=3, n=0.01)
     saveRDS(shape,paste0("HER_",bi,"_shape.rds"))
@@ -275,7 +274,7 @@ library(dplyr)
 
 p3 = lapply(1:11,FUN=function(x) {
   message(paste0("scene",x))
-  get_shp3d(readRDS(paste0("HER_",sprintf("%02d", x),"_shape.rds")), scene=paste0("scene",x))
+  KRMr::get_shp3d(readRDS(paste0("HER_",sprintf("%02d", x),"_shape.rds")), scene=paste0("scene",x))
   })
 fig <- subplot(p3)%>% layout(scene=list(domain=list(x=c(0,0.4),y=c(0.75,1)),
                                         aspectmode='data'))
@@ -315,7 +314,7 @@ set.seed(78965);L=rnorm(1,14,2.3) #random lengths drawn from a normal distributi
 ts.all=data.frame()
 for(i in 1:11){
   message(Sys.time(),": Processing Shape ", i)
-  ts=krm(frequency = c(38)*1e3,
+  ts=KRMr::krm(frequency = c(38)*1e3,
       c.w = 1490,
       rho.w = 1030,
       theta = 90,

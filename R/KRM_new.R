@@ -261,7 +261,7 @@ krm <- function(frequency =120 * 1000,
 
     rot=0
 
-    if(para$settings$theta > 180){
+    if(max(para$settings$theta) > 180){
       shape[,x.ind] = -shape[,x.ind]
       shape[,zL.ind] = -shape[,zL.ind]
       shape[,zU.ind] = -shape[,zU.ind]

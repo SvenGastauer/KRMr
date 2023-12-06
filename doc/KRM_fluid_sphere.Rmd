@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 library(ggplot2)
-library(KRMr)
+#library(KRMr)
 ```
 
 Testing the KRMr implementation of the KRM - Kirchhoff Ray Mode - model, based on equations described in detail in 'Acoustic models of fish: The Atlantic cod (Gadus morhua)' by Clay and Horne, 1994.  
