@@ -96,7 +96,7 @@ browseVignettes("KRMr")
 Please notify the author if you are using this package in any presentation or publication, so we can keep an up to date list of references for the package.
 Please cite this package as:
 
-*Gastauer S (2023). _KRMr: Kirchhoff Ray Mode Model for fisheries acoustics_. R package version 0.3.0.*
+*Gastauer S (2023). _KRMr: Kirchhoff Ray Mode Model for fisheries acoustics_. R package version 0.4.7.*
   
   Bibtex:
   ```
