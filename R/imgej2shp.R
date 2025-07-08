@@ -69,6 +69,7 @@ getx=function(xy, n=0.01){
 #' @param body position of the largest body in the shape names, defaults 1
 #' @param xy position of the xy coordinates in the dataframe defaults c(1,2)
 #' @param nam position of name of the shape, defaults 3
+#' @import concaveman
 #' @export
 Imagej2shp = function(shp, 
                       dorsal=c("Dorsal_body","Dorsal_bladder"), 
