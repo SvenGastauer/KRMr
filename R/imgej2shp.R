@@ -70,23 +70,28 @@ getx=function(xy, n=0.01){
 #' @param xy position of the xy coordinates in the dataframe defaults c(1,2)
 #' @param nam position of name of the shape, defaults 3
 #' @export
-Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("Lateral_body", "Lateral_bladder"), body=1, xy=c(1,2), nam=3, n=0.01){
-
+Imagej2shp = function(shp, 
+                      dorsal=c("Dorsal_body","Dorsal_bladder"), 
+                      lateral=c("Lateral_body", "Lateral_bladder"), 
+                      body=1, 
+                      xy=c(1,2), 
+                      nam=3, 
+                      n=0.01){
   #rename columns
   names(shp)[xy] = c("x","y")
   names(shp)[nam] = "part"
-
+  
   #non body parts
   selp = 1:length(dorsal)
   selp = selp[selp!=body]
-
+  
   shp$x=-shp$x
   shp$y=-shp$y
-
+  
   shp$xs=NA;shp$ys=NA
-
+  
   #adjust dorsal
-
+  
   if(length(selp) != 0){
     for(i in selp){
       tmp = shp%>%filter(part==dorsal[body])%>%select(x,y)
@@ -100,7 +105,7 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
     tmp = range01img(tmp, tmp2)
   }
   shp[shp$part == dorsal[body], c("xs","ys")] = tmp[[1]]
-
+  
   #adjust lateral
   if(length(selp) != 0){
     for(i in selp){
@@ -115,9 +120,11 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
     tmp = range01img(tmp, tmp2)
   }
   shp[shp$part == lateral[body], c("xs","ys")] = tmp[[1]]
-
+  
   get_shp=function(fbd,fbd2){
     #side view gives z, top view gives width
+    names(fbd) = c('x','y')
+    names(fbd2) = c('x','y')
     xxy=getx(fbd, n=n) #z low up
     xxy2=getx(fbd2,n=n) # width
     xxy2 = xxy2%>%filter(xxy2$X %in% xxy$X)
@@ -129,10 +136,14 @@ Imagej2shp =function(shp, dorsal=c("Dorsal_body","Dorsal_bladder"), lateral=c("L
              fbd2=shp[shp$part==dorsal[body], c("xs","ys")])
   if(length(selp)>0){
     shape = list(fb)
-    parts = lapply(selp, FUN = function(x) get_shp(shp[shp$part==lateral[x],
-                                                       c("xs","ys")],
-                                                   shp[shp$part==dorsal[x],
-                                                       c("xs","ys")]))
+    parts = lapply(selp, FUN = function(x) {
+      shplat = data.frame(concaveman::concaveman(as.matrix(shp[shp$part==lateral[x],c("xs","ys")])))
+      names(shplat)=c("x","ÿ")
+      shpdors = data.frame(concaveman::concaveman(as.matrix(shp[shp$part==dorsal[x],c("xs","ys")])))
+      names(shpdors)=c("x","ÿ")
+      get_shp(shplat,
+              shpdors)
+    })
     for(k in 1:length(selp)){
       shape[[k+1]] = parts[[k]]
     }
