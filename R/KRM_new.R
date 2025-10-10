@@ -65,7 +65,7 @@ shplot <- function(x_fb=NULL, x_sb=NULL, w_fb=NULL, w_sb=NULL, z_fbU=NULL,
       lines(x_sb2, z_sbL2, type='l')
     }
 
-    plot(x_sb,w_sb/2, type='l', ylim=c(min(z_sbL), max(z_sbU)),
+    plot(x_sb,w_sb/2, type='l', ylim=c(min(w_sb/2), max(w_sb/2)),
          asp=1, main='Ventral', xlab='x', ylab='w')
     lines(x_sb,- w_sb / 2, type='l')
 
@@ -79,7 +79,7 @@ shplot <- function(x_fb=NULL, x_sb=NULL, w_fb=NULL, w_sb=NULL, z_fbU=NULL,
          asp=1,main='Lateral', xlab='x',ylab='z')
     lines(x_fb,z_fbL, type='l')
 
-    plot(x_fb,w_fb/2, type='l', ylim=c(min(z_fbL), max(z_fbU)),
+    plot(x_fb,w_fb/2, type='l', ylim=c(min(w_fb/2), max(w_fb/2)),
          asp=1, main='Ventral', xlab='x', ylab='w')
     lines(x_fb,-w_fb/2, type='l')
   }
